@@ -39,3 +39,24 @@ def listar_ordens():
             JOIN veiculos v ON o.veiculo_id = v.id
         """)
         return cursor.fetchall()
+
+def atualizar_ordem(ordem_id, cliente_id, veiculo_id, descricao, status, valor):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE ordens_servico 
+            SET cliente_id = ?, veiculo_id = ?, descricao = ?, status = ?, valor = ?
+            WHERE id = ?      
+        ''', (cliente_id, veiculo_id, descricao, status, valor, ordem_id))
+        conn.commit()
+        return cursor.rowcount
+
+def deletar_ordem(ordem_id):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            DELETE FROM ordens_servico 
+            WHERE id = ?
+        ''', (ordem_id,))
+        conn.commit()
+        return cursor.rowcount

@@ -34,3 +34,20 @@ def listar_veiculos():
         JOIN clientes c ON v.cliente_id = c.id;
         """)
         return cursor.fetchall()
+
+def atualizar_veiculo(veiculo_id, cliente_id, modelo, ano):
+    with get_connection() as conexao:
+        cursor = conexao.cursor()
+        cursor.execute('''
+            UPDATE veiculos SET cliente_id = ?, modelo = ?, ano = ? WHERE id = ?;
+        ''', (cliente_id, modelo, ano, veiculo_id))
+        conexao.commit()
+        return cursor.rowcount
+
+def deletar_veiculo(veiculo_id):
+    with get_connection() as conexao:
+        cursor = conexao.cursor()
+        cursor.execute('''
+        DELETE FROM veiculos WHERE id = ?;''', (veiculo_id,))
+        conexao.commit()
+        return cursor.rowcount

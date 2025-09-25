@@ -27,11 +27,11 @@ def editar_cliente(cliente_id):
         data["email"])
     if linhas == 0:
         return jsonify({"erro": "Cliente não encontrado"}), 404
-    return jsonify({"mensagem": "Cliente atualizado com sucesso!"})
+    return jsonify({"mensagem": "Cliente atualizado com sucesso!"}),200
 
 @cliente_bp.route("/clientes/<int:cliente_id>", methods=["DELETE"])
 def excluir_cliente(cliente_id):
     linhas = deletar_cliente(cliente_id)
     if linhas == 0:
         return jsonify({"erro": "Cliente não encontrado"}), 404
-    return jsonify({"mensagem": "Cliente removido com sucesso!"})
+    return jsonify({"mensagem": "Cliente removido com sucesso!"}),200

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from model.veiculo_model import adicionar_veiulo, listar_veiculos
+from model.veiculo_model import adicionar_veiulo, listar_veiculos,deletar_veiculo,atualizar_veiculo
 from view.veiculo_view import formatar_veiculos, mensagem
 
 veiculo_bp = Blueprint("veiculo_bp", __name__)
@@ -19,3 +19,24 @@ def get_veiculos():
     return jsonify(formatar_veiculos(listar_veiculos())), 200
 
 
+@veiculo_bp.route('/veiculos/<int:veiculo_id>', methods=['PUT'])
+def editar_veiculo(veiculo_id):
+    data = request.json
+    linhas = atualizar_veiculo(
+        veiculo_id,
+        data["cliente_id"],
+        data["modelo"],
+        data["ano"]
+        )
+    if linhas == 0:
+        return jsonify({"erro": "Veículo não encontrado"}), 404
+    else:
+        return jsonify({"mensagem": "Veículo atualizado com sucesso!"})
+
+@veiculo_bp.route('/veiculos/<int:veiculo_id>', methods=['DELETE'])
+def excluir_veiculo(veiculo_id):
+    linhas = deletar_veiculo(veiculo_id)
+    if linhas == 0:
+        return jsonify({"erro": "Veículo não encontrado"}), 404
+    else:
+        return jsonify({"mensagem": "Veículo removido com sucesso!"})
